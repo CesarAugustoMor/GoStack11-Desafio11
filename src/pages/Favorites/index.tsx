@@ -30,9 +30,22 @@ interface Food {
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<Food[]>([]);
 
+  // Load favorite foods from api
   useEffect(() => {
     async function loadFavorites(): Promise<void> {
-      // Load favorite foods from api
+      const response = await api.get('favorites');
+
+      const favoritesResp = response.data.map((food: Food) => {
+        const formattedPrice = formatValue(food.price);
+
+        return {
+          ...food,
+          formattedPrice,
+        };
+      });
+      console.log(response.data);
+
+      setFavorites(favoritesResp);
     }
 
     loadFavorites();
